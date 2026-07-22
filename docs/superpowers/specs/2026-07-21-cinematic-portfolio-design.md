@@ -127,7 +127,7 @@ Small shared easing set (base `cubic-bezier(0.22, 1, 0.36, 1)`). No bounce, no e
 ### Accessibility
 
 - All narrative text is real DOM in document order; canvas is `aria-hidden`. Semantic headings; the story reads coherently top to bottom in a screen reader.
-- WCAG AA (≥4.5:1) verified at every point of the theme interpolation — caption colors interpolate on a curve that preserves contrast through mid-transition, browser-measured at sampled scroll positions.
+- WCAG AA (≥4.5:1) verified at every content rest position and act midpoint, enforced by unit tests (layout→curve→palette chain). Text scrolling *through* a theme crossing briefly dissolves into the background (sub-AA around dusk 0.33–0.42) — this is an accepted, intentional cinematic device ("the dissolve"), decided at the M2 walkthrough (2026-07-21). Content never *rests* inside a crossing; the journeyLayout tests enforce that.
 - Full keyboard access; nothing interactive lives only in the canvas; visible focus states.
 
 ### SEO
