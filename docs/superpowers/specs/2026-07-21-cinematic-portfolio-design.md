@@ -13,6 +13,16 @@ Scope: Phase 1 of the cinematic personal portfolio
 
 **Relationship to Centauri:** separate repo, separate domain, separate identity. Shared DNA (neutral warm palette, rare copper accent, tokens-first discipline) but its own tokens, typeface, and mood. Rules Centauri bans (heavy motion, immersive 3D world, dark-dominant sections) are intentionally in-bounds here.
 
+## 1a. Status note — the 3D world is parked (2026-07-22)
+
+Milestones 3 and 4 built the WebGL world described below (persistent canvas, scroll-driven camera rail, dusk-synced fog, falling copper signal, four designed strata). After reviewing it, Alex decided to **remove the entire 3D layer from the site** and park it.
+
+- The site currently ships the Milestone 2 experience: the six-act dusk journey in pure DOM. That version is publishable as-is.
+- The world's complete, reviewed code is preserved at git tag **`world-v1`**. Revive with:
+  `git checkout world-v1 -- components/world lib/world` (then restore the `three`/`@react-three/fiber`/`@react-three/drei`/`@types/three` dependencies, re-mount `<WorldCanvasGate />` in `app/page.tsx`, and restore the `pointer-events-none`/`pointer-events-auto` discipline on the section wrappers and content columns).
+- Sections 4 (world layer), 5 (materials), 6 (signature moments involving the canvas), and 7 (device tiers 1–2) describe the parked layer. Treat them as **the design of record for a future revival, not as current site behavior.** Everything else in this spec — narrative, dusk-as-the-mode, palette, typography, motion tiers for DOM, accessibility, content — remains live and canonical.
+- Whether the world returns in this form, a different form, or not at all is an open decision.
+
 ## 2. Core Concept
 
 **Dusk is the mode.** There is no light/dark toggle. The scroll journey owns the lighting: the page opens in warm daylight, descends into a dark immersive world mid-story, and resurfaces into light at the end. The lighting transition is the signature device.
