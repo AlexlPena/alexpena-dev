@@ -2,15 +2,22 @@
 
 import { useEffect, useState } from "react";
 
+// Probe once per session — GPU capability doesn't change mid-visit — and
+// explicitly release the probe context so it can't count against the
+// browser's live-context cap.
+let webglProbe: boolean | null = null;
+
 function webglAvailable(): boolean {
+  if (webglProbe !== null) return webglProbe;
   try {
     const canvas = document.createElement("canvas");
-    return !!(
-      canvas.getContext("webgl2") || canvas.getContext("webgl")
-    );
+    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+    webglProbe = !!gl;
+    if (gl) gl.getExtension("WEBGL_lose_context")?.loseContext();
   } catch {
-    return false;
+    webglProbe = false;
   }
+  return webglProbe;
 }
 
 // The world mounts only where it can be excellent: desktop pointer devices,

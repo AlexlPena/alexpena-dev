@@ -23,7 +23,7 @@ export function Descent() {
           className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
           style={{ top: `${topVhForRest(STRATUM_REST[i])}vh` }}
         >
-          <div className="mx-auto w-full max-w-2xl px-6">
+          <div className="pointer-events-auto mx-auto w-full max-w-2xl px-6">
             <Readout>
               Depth {stratum.depth} · {stratum.era} · {stratum.year}
             </Readout>

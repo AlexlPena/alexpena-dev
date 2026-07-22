@@ -12,7 +12,7 @@ export function Daylight() {
       className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
       style={{ top: `${topVhForRest(REST_POINTS.actVI)}vh` }}
     >
-      <div className="mx-auto w-full max-w-2xl px-6">
+      <div className="pointer-events-auto mx-auto w-full max-w-2xl px-6">
         <h2 className="sr-only">About and contact</h2>
         <div className="flex items-center gap-3">
           <Readout>Act VI · {CONTACT.heading}</Readout>
@@ -36,7 +36,7 @@ export function Daylight() {
             <a
               key={link.href}
               href={link.href}
-              className="pointer-events-auto text-body text-dusk-ink underline decoration-dusk-copper underline-offset-4 hover:text-dusk-copper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dusk-copper"
+              className="text-body text-dusk-ink underline decoration-dusk-copper underline-offset-4 hover:text-dusk-copper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dusk-copper"
             >
               {link.label}
             </a>
