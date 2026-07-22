@@ -1,7 +1,11 @@
 import { duskCurve } from "./duskCurve";
 import { actAt, type Act } from "./acts";
 
-export type ScrollState = { progress: number; dusk: number; act: Act };
+export type ScrollState = {
+  readonly progress: number;
+  readonly dusk: number;
+  readonly act: Act;
+};
 
 export type ScrollStore = {
   getState: () => ScrollState;
