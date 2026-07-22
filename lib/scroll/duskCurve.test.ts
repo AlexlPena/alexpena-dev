@@ -11,13 +11,13 @@ describe("duskCurve", () => {
 
   test("Act II plateau is the first dim (0.12)", () => {
     expect(duskCurve(0.15)).toBeCloseTo(0.12, 5);
-    expect(duskCurve(0.19)).toBeCloseTo(0.12, 5);
+    expect(duskCurve(0.17)).toBeCloseTo(0.12, 5);
   });
 
   test("stratum plateaus hit 0.55 / 0.70 / 0.85 / 1.0", () => {
     expect(duskCurve(0.27)).toBeCloseTo(0.55, 5); // stratum 1
     expect(duskCurve(0.38)).toBeCloseTo(0.7, 5); // stratum 2
-    expect(duskCurve(0.5)).toBeCloseTo(0.85, 5); // stratum 3
+    expect(duskCurve(0.54)).toBeCloseTo(0.85, 5); // stratum 3
     expect(duskCurve(0.65)).toBeCloseTo(1, 5); // stratum 4
   });
 
@@ -27,7 +27,7 @@ describe("duskCurve", () => {
   });
 
   test("ascent returns to light and Act VI stays light", () => {
-    expect(duskCurve(0.92)).toBe(0);
+    expect(duskCurve(0.94)).toBe(0);
     expect(duskCurve(1)).toBe(0);
   });
 

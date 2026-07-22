@@ -382,9 +382,9 @@ function smoothstep(edge0: number, edge1: number, x: number): number {
 // centered where backgrounds are near mid-tone, so no content plateau ever
 // pairs mid-tone bg with mid-tone text.
 const GROUP_EASE: Record<keyof ThemeTokens, (d: number) => number> = {
-  bg: (d) => smoothstep(0.1, 0.6, d),
-  surface: (d) => smoothstep(0.1, 0.6, d),
-  line: (d) => smoothstep(0.1, 0.6, d),
+  bg: (d) => smoothstep(0.08, 0.7, d),
+  surface: (d) => smoothstep(0.08, 0.7, d),
+  line: (d) => smoothstep(0.08, 0.7, d),
   ink: (d) => smoothstep(0.3, 0.4, d),
   inkSecondary: (d) => smoothstep(0.3, 0.4, d),
   copper: (d) => smoothstep(0.2, 0.8, d),
@@ -459,13 +459,13 @@ describe("duskCurve", () => {
 
   test("Act II plateau is the first dim (0.12)", () => {
     expect(duskCurve(0.15)).toBeCloseTo(0.12, 5);
-    expect(duskCurve(0.19)).toBeCloseTo(0.12, 5);
+    expect(duskCurve(0.17)).toBeCloseTo(0.12, 5);
   });
 
   test("stratum plateaus hit 0.55 / 0.70 / 0.85 / 1.0", () => {
     expect(duskCurve(0.27)).toBeCloseTo(0.55, 5); // stratum 1
     expect(duskCurve(0.38)).toBeCloseTo(0.7, 5); // stratum 2
-    expect(duskCurve(0.5)).toBeCloseTo(0.85, 5); // stratum 3
+    expect(duskCurve(0.54)).toBeCloseTo(0.85, 5); // stratum 3
     expect(duskCurve(0.65)).toBeCloseTo(1, 5); // stratum 4
   });
 
@@ -475,7 +475,7 @@ describe("duskCurve", () => {
   });
 
   test("ascent returns to light and Act VI stays light", () => {
-    expect(duskCurve(0.92)).toBe(0);
+    expect(duskCurve(0.94)).toBe(0);
     expect(duskCurve(1)).toBe(0);
   });
 
@@ -543,17 +543,17 @@ Expected: FAIL — modules not found.
 export const DUSK_ANCHORS: ReadonlyArray<readonly [number, number]> = [
   [0, 0],
   [0.1, 0], // Act I: full light
-  [0.13, 0.12],
-  [0.19, 0.12], // Act II: first dim
-  [0.23, 0.55],
-  [0.3, 0.55], // Stratum 1: Prompt Engineering
-  [0.34, 0.7],
-  [0.42, 0.7], // Stratum 2: Context Engineering
-  [0.46, 0.85],
-  [0.54, 0.85], // Stratum 3: Harness Engineering
-  [0.6, 1],
+  [0.145, 0.12],
+  [0.175, 0.12], // Act II: first dim
+  [0.225, 0.55],
+  [0.295, 0.55], // Stratum 1: Prompt Engineering
+  [0.365, 0.7],
+  [0.435, 0.7], // Stratum 2: Context Engineering
+  [0.505, 0.85],
+  [0.575, 0.85], // Stratum 3: Harness Engineering
+  [0.65, 1],
   [0.82, 1], // Stratum 4 + Act IV: full dark
-  [0.92, 0], // Act V: fast ascent
+  [0.94, 0], // Act V: ascent (slightly longer tail than the act boundary, by design)
   [1, 0], // Act VI: full light
 ];
 

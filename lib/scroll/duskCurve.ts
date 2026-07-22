@@ -5,17 +5,17 @@
 export const DUSK_ANCHORS: ReadonlyArray<readonly [number, number]> = [
   [0, 0],
   [0.1, 0], // Act I: full light
-  [0.13, 0.12],
-  [0.19, 0.12], // Act II: first dim
-  [0.23, 0.55],
-  [0.3, 0.55], // Stratum 1: Prompt Engineering
-  [0.34, 0.7],
-  [0.42, 0.7], // Stratum 2: Context Engineering
-  [0.46, 0.85],
-  [0.54, 0.85], // Stratum 3: Harness Engineering
-  [0.6, 1],
+  [0.145, 0.12],
+  [0.175, 0.12], // Act II: first dim
+  [0.225, 0.55],
+  [0.295, 0.55], // Stratum 1: Prompt Engineering
+  [0.365, 0.7],
+  [0.435, 0.7], // Stratum 2: Context Engineering
+  [0.505, 0.85],
+  [0.575, 0.85], // Stratum 3: Harness Engineering
+  [0.65, 1],
   [0.82, 1], // Stratum 4 + Act IV: full dark
-  [0.92, 0], // Act V: fast ascent
+  [0.94, 0], // Act V: ascent (slightly longer tail than the act boundary, by design)
   [1, 0], // Act VI: full light
 ];
 

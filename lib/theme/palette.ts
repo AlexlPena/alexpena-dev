@@ -45,9 +45,9 @@ function smoothstep(edge0: number, edge1: number, x: number): number {
 // centered where backgrounds are near mid-tone, so no content plateau ever
 // pairs mid-tone bg with mid-tone text.
 const GROUP_EASE: Record<keyof ThemeTokens, (d: number) => number> = {
-  bg: (d) => smoothstep(0.1, 0.6, d),
-  surface: (d) => smoothstep(0.1, 0.6, d),
-  line: (d) => smoothstep(0.1, 0.6, d),
+  bg: (d) => smoothstep(0.08, 0.7, d),
+  surface: (d) => smoothstep(0.08, 0.7, d),
+  line: (d) => smoothstep(0.08, 0.7, d),
   ink: (d) => smoothstep(0.3, 0.4, d),
   inkSecondary: (d) => smoothstep(0.3, 0.4, d),
   copper: (d) => smoothstep(0.2, 0.8, d),
