@@ -11,8 +11,8 @@ export function Request() {
       style={{ top: `${topVhForRest(REST_POINTS.actII)}vh` }}
     >
       <div className="mx-auto w-full max-w-2xl px-6">
-        <Readout>Act II · {IDENTITY.request.heading}</Readout>
         <h2 className="sr-only">The request</h2>
+        <Readout>Act II · {IDENTITY.request.heading}</Readout>
         <div className="mt-6 space-y-5">
           {IDENTITY.request.paragraphs.map((text, i) => (
             <p key={i} className="text-body leading-relaxed text-dusk-ink">

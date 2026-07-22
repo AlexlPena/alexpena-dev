@@ -11,8 +11,8 @@ export function Outcomes() {
       style={{ top: `${topVhForRest(REST_POINTS.outcomes)}vh` }}
     >
       <div className="mx-auto w-full max-w-3xl px-6">
-        <Readout>Act IV · Completed runs</Readout>
         <h2 className="sr-only">Completed runs</h2>
+        <Readout>Act IV · Completed runs</Readout>
         <div className="mt-8 space-y-6">
           {OUTCOMES.map((o) => (
             <article
