@@ -1,6 +1,7 @@
 "use client";
 
 import { CameraRig } from "./CameraRig";
+import { FogRig } from "./FogRig";
 import { StratumBlock } from "./StratumBlock";
 import { Signal } from "./Signal";
 import { STRATUM_DEPTHS } from "@/lib/world/rail";
@@ -11,8 +12,9 @@ export function World() {
   return (
     <>
       <CameraRig />
-      <ambientLight intensity={0.25} />
-      <directionalLight position={[4, 8, 6]} intensity={0.6} />
+      <FogRig />
+      <hemisphereLight args={["#f2efe9", "#12100e", 0.5]} />
+      <directionalLight position={[6, 10, 8]} intensity={0.7} />
       <Signal />
       {STRATUM_DEPTHS.map((depth, i) => (
         <StratumBlock key={depth} depth={depth} variant={i as 0 | 1 | 2 | 3} />
