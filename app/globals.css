@@ -31,6 +31,7 @@
   --text-body: 1.0625rem;
   --text-small: 0.875rem;
   --text-mono-size: 0.8125rem;
+  --animate-signal-pulse: signal-pulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
 html {
@@ -42,4 +43,19 @@ body {
   font-family: var(--font-cabinet), system-ui, sans-serif;
   font-size: var(--text-body);
   line-height: 1.6;
+}
+
+@keyframes signal-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
 }
