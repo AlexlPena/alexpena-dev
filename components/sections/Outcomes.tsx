@@ -12,15 +12,16 @@ export function Outcomes() {
     >
       <div className="mx-auto w-full max-w-3xl px-6">
         <Readout>Act IV · Completed runs</Readout>
+        <h2 className="sr-only">Completed runs</h2>
         <div className="mt-8 space-y-6">
           {OUTCOMES.map((o) => (
             <article
               key={o.id}
               className="border-l border-dusk-line pl-5"
             >
-              <h2 className="text-title leading-snug text-dusk-ink">
+              <h3 className="text-title leading-snug text-dusk-ink">
                 {o.title}
-              </h2>
+              </h3>
               <p className="mt-2 text-small leading-relaxed text-dusk-ink-secondary">
                 {o.problem}
               </p>

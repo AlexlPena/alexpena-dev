@@ -35,13 +35,18 @@ export function createScrollStore(): ScrollStore {
   let state: ScrollState = derive(0, reduced);
   const subs = new Set<(s: ScrollState) => void>();
 
+  const errored = new WeakSet<(s: ScrollState) => void>();
   const notify = () => {
     subs.forEach((fn) => {
       try {
         fn(state);
       } catch (err) {
-        // One broken subscriber must not starve the rest of the frame.
-        console.error("scroll store subscriber threw", err);
+        // One broken subscriber must not starve the rest of the frame —
+        // and must not flood the console at 60Hz either.
+        if (!errored.has(fn)) {
+          errored.add(fn);
+          console.error("scroll store subscriber threw (logged once)", err);
+        }
       }
     });
   };

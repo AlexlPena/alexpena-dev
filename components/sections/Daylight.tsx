@@ -13,6 +13,7 @@ export function Daylight() {
       style={{ top: `${topVhForRest(REST_POINTS.actVI)}vh` }}
     >
       <div className="mx-auto w-full max-w-2xl px-6">
+        <h2 className="sr-only">About and contact</h2>
         <div className="flex items-center gap-3">
           <Readout>Act VI · {CONTACT.heading}</Readout>
           <SignalDot />
