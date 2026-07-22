@@ -16,8 +16,8 @@ export function World() {
     <>
       <CameraRig />
       <FogRig />
-      <hemisphereLight args={["#f2efe9", "#12100e", 0.5]} />
-      <directionalLight position={[6, 10, 8]} intensity={0.7} />
+      <hemisphereLight args={["#f2efe9", "#12100e", 1.6]} />
+      <directionalLight position={[6, 10, 8]} intensity={2.2} />
       <Signal />
       <PromptStratum depth={STRATUM_DEPTHS[0]} />
       <ContextStratum depth={STRATUM_DEPTHS[1]} />

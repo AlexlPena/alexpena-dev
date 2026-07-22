@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { scrollStore } from "@/lib/scroll/store";
 import { railY } from "@/lib/world/rail";
@@ -15,16 +15,30 @@ import {
 // The first frame snaps directly to target so a canvas that mounts
 // mid-journey (reload with scroll restoration, eligibility flip) doesn't
 // swoop down through every stratum.
+//
+// Pointer comes from a window listener, not R3F's state.pointer: the canvas
+// wrapper is pointer-events-none (the DOM must stay interactive above it),
+// so R3F's own canvas-scoped listeners never fire.
 export function CameraRig() {
   const snapped = useRef(false);
+  const pointer = useRef({ x: 0, y: 0 });
 
-  useFrame(({ camera, pointer }, delta) => {
+  useEffect(() => {
+    const onMove = (e: PointerEvent) => {
+      pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, []);
+
+  useFrame(({ camera }, delta) => {
     const target = railY(scrollStore.getState().progress);
-    const px = parallaxOffset(pointer.x, PARALLAX_MAX_X);
-    const py = parallaxOffset(pointer.y, PARALLAX_MAX_Y);
+    const px = parallaxOffset(pointer.current.x, PARALLAX_MAX_X);
+    const py = parallaxOffset(pointer.current.y, PARALLAX_MAX_Y);
     if (!snapped.current) {
       snapped.current = true;
-      camera.position.y = target;
+      camera.position.y = target + py;
       camera.position.x = px;
       return;
     }

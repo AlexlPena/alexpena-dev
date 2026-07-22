@@ -29,7 +29,7 @@ export function PromptStratum({ depth }: { depth: number }) {
   ];
 
   return (
-    <group position={[2.5, depth, -4]}>
+    <group position={[3.8, depth, -4]}>
       {vanes.map((v, i) => (
         <mesh key={i} position={[v.x, v.y, 0]} rotation={[0, 0, v.tilt]}>
           <boxGeometry args={[v.w, 0.07, 1.1]} />
@@ -38,7 +38,7 @@ export function PromptStratum({ depth }: { depth: number }) {
             roughness={0.85}
             metalness={0.15}
           />
-          {v.copper && <Edges color={COPPER} />}
+          {v.copper && <Edges color={COPPER} fog />}
         </mesh>
       ))}
     </group>

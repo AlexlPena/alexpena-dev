@@ -71,3 +71,9 @@ export function duskToTokens(dusk: number): ThemeTokens {
   }
   return out;
 }
+
+// Single-token accessor for hot paths (per-frame canvas work) that need only
+// the background: avoids interpolating and hex-formatting all six tokens.
+export function duskToBg(dusk: number): string {
+  return duskToTokens(dusk).bg;
+}

@@ -27,7 +27,7 @@ export function LoopStratum({ depth }: { depth: number }) {
   });
 
   return (
-    <group position={[2.5, depth, -4]}>
+    <group position={[3.8, depth, -4]}>
       {RINGS.map((ring, i) => (
         <group
           key={ring.radius}

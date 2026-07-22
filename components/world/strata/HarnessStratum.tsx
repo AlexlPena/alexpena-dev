@@ -35,7 +35,7 @@ export function HarnessStratum({ depth }: { depth: number }) {
   });
 
   return (
-    <group position={[2.5, depth, -4]}>
+    <group position={[3.8, depth, -4]}>
       {[0.75, -0.75].map((y) => (
         <group key={y} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <mesh>

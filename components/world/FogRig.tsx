@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { scrollStore } from "@/lib/scroll/store";
-import { duskToTokens } from "@/lib/theme/palette";
+import { duskToBg } from "@/lib/theme/palette";
 import { FOG_NEAR, fogFar } from "@/lib/world/atmosphere";
 
 // Keeps three.js fog in lockstep with the dusk engine: fog color = the
@@ -24,7 +24,7 @@ export function FogRig() {
       fogRef.current = new THREE.Fog("#f7f5f1", FOG_NEAR, fogFar(0));
       scene.fog = fogRef.current;
     }
-    fogRef.current.color.set(duskToTokens(effectiveDusk).bg);
+    fogRef.current.color.set(duskToBg(effectiveDusk));
     fogRef.current.far = fogFar(effectiveDusk);
   });
 

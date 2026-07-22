@@ -41,7 +41,7 @@ export function ContextStratum({ depth }: { depth: number }) {
   });
 
   return (
-    <group position={[2.5, depth, -4]}>
+    <group position={[3.8, depth, -4]}>
       <group ref={orbit}>
         {PLANES.map((p, i) => (
           <group
