@@ -68,9 +68,9 @@ describe("signal", () => {
     expect(signalY(0.3)).toBeCloseTo(-10, 5);
   });
 
-  test("pulls ahead to 6 units entering the loop stratum", () => {
-    expect(signalLead(0.65)).toBeCloseTo(6, 5);
-    expect(signalLead(0.7)).toBeCloseTo(6, 5);
+  test("pulls ahead to 5 units entering the loop stratum", () => {
+    expect(signalLead(0.65)).toBeCloseTo(5, 5);
+    expect(signalLead(0.7)).toBeCloseTo(5, 5);
   });
 
   test("visibility window", () => {

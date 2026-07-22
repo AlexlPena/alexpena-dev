@@ -37,7 +37,7 @@ export const STRATUM_DEPTHS: readonly number[] = [
 // The signal runs ahead of the camera; entering the loop stratum it pulls
 // further ahead — the first hint the system is self-driving.
 export function signalLead(progress: number): number {
-  return 2 + 4 * smoothstep(0.575, 0.65, clamp01(progress));
+  return 2 + 3 * smoothstep(0.575, 0.65, clamp01(progress));
 }
 
 export function signalY(progress: number): number {

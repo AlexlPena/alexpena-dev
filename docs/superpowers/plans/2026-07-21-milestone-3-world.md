@@ -94,7 +94,7 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
   - `railY(progress: number): number` — camera Y; 0 through Act I–II, linear descent −0→−40 over p 0.2–0.7, hold −40 through 0.82, fast rise back to 0 over 0.82–0.92, 0 after
   - `STRATUM_DEPTHS: readonly number[]` — the four camera-rest depths, computed as `railY(REST_POINTS.stratumN)`
   - `signalY(progress: number): number` — `railY(p) - signalLead(p)`
-  - `signalLead(progress: number): number` — 2 world units, growing to 6 across p 0.575–0.65 (the signal pulls ahead entering the loop stratum)
+  - `signalLead(progress: number): number` — 2 world units, growing to 5 across p 0.575–0.65 (the signal pulls ahead entering the loop stratum)
   - `signalVisible(progress: number): boolean` — true for p in [0.10, 0.86]
 
 - [ ] **Step 1: Write failing tests — `lib/world/rail.test.ts`**
@@ -162,9 +162,9 @@ describe("signal", () => {
     expect(signalY(0.3)).toBeCloseTo(railY(0.3) - 2, 5);
   });
 
-  test("pulls ahead to 6 units entering the loop stratum", () => {
-    expect(signalLead(0.65)).toBeCloseTo(6, 5);
-    expect(signalLead(0.7)).toBeCloseTo(6, 5);
+  test("pulls ahead to 5 units entering the loop stratum", () => {
+    expect(signalLead(0.65)).toBeCloseTo(5, 5);
+    expect(signalLead(0.7)).toBeCloseTo(5, 5);
   });
 
   test("visibility window", () => {
@@ -224,7 +224,7 @@ export const STRATUM_DEPTHS: readonly number[] = [
 // The signal runs ahead of the camera; entering the loop stratum it pulls
 // further ahead — the first hint the system is self-driving.
 export function signalLead(progress: number): number {
-  return 2 + 4 * smoothstep(0.575, 0.65, clamp01(progress));
+  return 2 + 3 * smoothstep(0.575, 0.65, clamp01(progress));
 }
 
 export function signalY(progress: number): number {
