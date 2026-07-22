@@ -7,10 +7,10 @@ export function Outcomes() {
   return (
     <section
       aria-label="Completed runs"
-      className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
+      className="absolute inset-x-0 flex h-screen items-center"
       style={{ top: `${topVhForRest(REST_POINTS.outcomes)}vh` }}
     >
-      <div className="pointer-events-auto mx-auto w-full max-w-3xl px-6">
+      <div className="mx-auto w-full max-w-3xl px-6">
         <h2 className="sr-only">Completed runs</h2>
         <Readout>Act IV · Completed runs</Readout>
         <div className="mt-8 space-y-6">

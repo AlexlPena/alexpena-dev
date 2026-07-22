@@ -9,10 +9,10 @@ export function Daylight() {
   return (
     <section
       aria-label="About and contact"
-      className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
+      className="absolute inset-x-0 flex h-screen items-center"
       style={{ top: `${topVhForRest(REST_POINTS.actVI)}vh` }}
     >
-      <div className="pointer-events-auto mx-auto w-full max-w-2xl px-6">
+      <div className="mx-auto w-full max-w-2xl px-6">
         <h2 className="sr-only">About and contact</h2>
         <div className="flex items-center gap-3">
           <Readout>Act VI · {CONTACT.heading}</Readout>

@@ -8,10 +8,10 @@ export function Surface() {
   return (
     <section
       aria-label="Introduction"
-      className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
+      className="absolute inset-x-0 flex h-screen items-center"
       style={{ top: `${topVhForRest(REST_POINTS.actI)}vh` }}
     >
-      <div className="pointer-events-auto mx-auto w-full max-w-3xl px-6">
+      <div className="mx-auto w-full max-w-3xl px-6">
         <div className="flex items-center gap-3">
           <Readout>{IDENTITY.role}</Readout>
           <SignalDot />
