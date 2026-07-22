@@ -48,4 +48,17 @@ describe("duskCurve", () => {
       expect(anchorValues).toContain(v);
     }
   });
+
+  test("no flat (content-bearing) segment sits in the ink-crossover band [0.3, 0.4]", () => {
+    for (let i = 1; i < DUSK_ANCHORS.length; i++) {
+      const [, y0] = DUSK_ANCHORS[i - 1];
+      const [, y1] = DUSK_ANCHORS[i];
+      if (y0 === y1) {
+        expect(
+          y0 < 0.3 || y0 > 0.4,
+          `flat segment at dusk=${y0} is inside the ink crossover band`
+        ).toBe(true);
+      }
+    }
+  });
 });

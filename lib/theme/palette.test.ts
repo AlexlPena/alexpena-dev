@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 import { duskToTokens, CONTENT_PLATEAUS, LIGHT, DARK } from "./palette";
 import { contrastRatio } from "./contrast";
+import { duskCurve } from "../scroll/duskCurve";
+import { actMidpoint } from "../scroll/acts";
 
 describe("duskToTokens", () => {
   test("dusk 0 returns exact light pole", () => {
@@ -26,6 +28,21 @@ describe("duskToTokens", () => {
       expect(
         contrastRatio(t.inkSecondary, t.bg),
         `inkSecondary on bg at dusk=${d}`
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  test("reduced-motion act-midpoint values keep AA contrast for every act", () => {
+    for (const act of [1, 2, 3, 4, 5, 6] as const) {
+      const d = duskCurve(actMidpoint(act));
+      const t = duskToTokens(d);
+      expect(
+        contrastRatio(t.ink, t.bg),
+        `ink on bg at act ${act} midpoint (dusk=${d})`
+      ).toBeGreaterThanOrEqual(4.5);
+      expect(
+        contrastRatio(t.inkSecondary, t.bg),
+        `inkSecondary on bg at act ${act} midpoint (dusk=${d})`
       ).toBeGreaterThanOrEqual(4.5);
     }
   });
