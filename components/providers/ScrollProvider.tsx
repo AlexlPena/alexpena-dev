@@ -43,7 +43,14 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
       root.dataset.act = String(s.act);
     });
 
-    // Apply initial state (handles reload mid-page).
+    // Apply initial state unconditionally — setProgress dedupes identical
+    // values, so a fresh top-of-page load would otherwise never sync the DOM.
+    const initial = scrollStore.getState();
+    const initialDusk = reduced
+      ? duskCurve(actMidpoint(initial.act))
+      : initial.dusk;
+    applyTokens(root, duskToTokens(initialDusk));
+    root.dataset.act = String(initial.act);
     scrollStore.setProgress(window.scrollY === 0 ? 0 : trigger.progress);
 
     return () => {
