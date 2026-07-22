@@ -28,7 +28,7 @@
   --text-hero: clamp(3.25rem, 7vw, 6.5rem);
   --text-display: clamp(2.25rem, 4.5vw, 4rem);
   --text-title: clamp(1.5rem, 2.5vw, 2rem);
-  --text-body: 1.0625rem;
+  --text-body: 1.0625rem; /* 17px — body must stay >=16px (WCAG floor, no test pins this) */
   --text-small: 0.875rem;
   --text-mono-size: 0.8125rem;
   --animate-signal-pulse: signal-pulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;

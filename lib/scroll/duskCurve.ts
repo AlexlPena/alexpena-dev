@@ -1,7 +1,9 @@
 // Piecewise-linear dusk curve over normalized scroll progress.
 // Plateaus are where content sits; the palette's contrast tests prove AA at
-// exactly these values. Crossings between plateaus are transitional voids —
-// no content is placed there (enforced by page layout, Task 8).
+// exactly these values.
+// Content REST positions avoid crossings (enforced by journeyLayout tests);
+// text scrolling THROUGH a crossing dips below AA briefly — accepted risk
+// pending the M2 walkthrough decision (see M2 final review).
 export const DUSK_ANCHORS: ReadonlyArray<readonly [number, number]> = [
   [0, 0],
   [0.1, 0], // Act I: full light

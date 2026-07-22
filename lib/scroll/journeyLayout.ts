@@ -21,6 +21,6 @@ export const REST_POINTS = {
   stratum2: 0.4,
   stratum3: 0.54,
   stratum4: 0.7,
-  outcomes: 0.78,
+  outcomes: 0.81,
   actVI: 1,
 } as const;

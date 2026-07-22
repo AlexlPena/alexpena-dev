@@ -23,7 +23,7 @@ export function Surface() {
           {IDENTITY.tagline}
         </p>
         <p className="mt-16 font-mono text-mono-size uppercase tracking-[0.08em] text-dusk-ink-secondary">
-          {IDENTITY.scrollHint} ↓
+          {IDENTITY.scrollHint} <span aria-hidden>↓</span>
         </p>
       </div>
     </section>
