@@ -9,14 +9,6 @@
   --line: #dfd9d0;
   --copper: #c0682b;
 
-  /* Type scale (fluid) */
-  --text-hero: clamp(3.25rem, 7vw, 6.5rem);
-  --text-display: clamp(2.25rem, 4.5vw, 4rem);
-  --text-title: clamp(1.5rem, 2.5vw, 2rem);
-  --text-body: 1.0625rem; /* 17px — body must stay >=16px */
-  --text-small: 0.875rem;
-  --text-mono: 0.8125rem;
-
   /* Motion */
   --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -30,6 +22,15 @@
   --color-dusk-copper: var(--copper);
   --font-sans: var(--font-cabinet);
   --font-mono: var(--font-mono);
+}
+
+@theme {
+  --text-hero: clamp(3.25rem, 7vw, 6.5rem);
+  --text-display: clamp(2.25rem, 4.5vw, 4rem);
+  --text-title: clamp(1.5rem, 2.5vw, 2rem);
+  --text-body: 1.0625rem;
+  --text-small: 0.875rem;
+  --text-mono-size: 0.8125rem;
 }
 
 html {
