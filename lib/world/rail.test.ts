@@ -52,12 +52,20 @@ describe("STRATUM_DEPTHS", () => {
       expect(STRATUM_DEPTHS[i]).toBeLessThan(STRATUM_DEPTHS[i - 1]);
     }
   });
+
+  test("matches the spec's literal depths", () => {
+    expect(STRATUM_DEPTHS[0]).toBeCloseTo(-4.8, 5);
+    expect(STRATUM_DEPTHS[1]).toBeCloseTo(-16, 5);
+    expect(STRATUM_DEPTHS[2]).toBeCloseTo(-27.2, 5);
+    expect(STRATUM_DEPTHS[3]).toBeCloseTo(-40, 5);
+  });
 });
 
 describe("signal", () => {
   test("leads the camera by 2 units before the loop stratum", () => {
     expect(signalLead(0.3)).toBeCloseTo(2, 5);
     expect(signalY(0.3)).toBeCloseTo(railY(0.3) - 2, 5);
+    expect(signalY(0.3)).toBeCloseTo(-10, 5);
   });
 
   test("pulls ahead to 6 units entering the loop stratum", () => {
