@@ -14,12 +14,12 @@ export default function Home() {
     <>
       {/* world-canvas-slot: Task 5 mounts <WorldCanvas /> here (fixed, z-0, behind the DOM) */}
       <main className="relative z-10" style={{ height: `${JOURNEY_VH}vh` }}>
-      <Surface />
-      <Request />
-      <Descent />
-      <Outcomes />
-      <Daylight />
-    </main>
+        <Surface />
+        <Request />
+        <Descent />
+        <Outcomes />
+        <Daylight />
+      </main>
     </>
   );
 }
