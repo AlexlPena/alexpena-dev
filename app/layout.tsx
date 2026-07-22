@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cabinet, mono } from "./fonts";
+import { ScrollProvider } from "@/components/providers/ScrollProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,7 +14,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${cabinet.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <ScrollProvider>{children}</ScrollProvider>
+      </body>
     </html>
   );
 }

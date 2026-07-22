@@ -1,26 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Dusk-interpolated tokens — light pole defaults (SSR/first paint). */
+  --bg: #f7f5f1;
+  --surface: #ffffff;
+  --ink: #1a1815;
+  --ink-secondary: #6b655c;
+  --line: #dfd9d0;
+  --copper: #c0682b;
+
+  /* Type scale (fluid) */
+  --text-hero: clamp(3.25rem, 7vw, 6.5rem);
+  --text-display: clamp(2.25rem, 4.5vw, 4rem);
+  --text-title: clamp(1.5rem, 2.5vw, 2rem);
+  --text-body: 1.0625rem; /* 17px — body must stay >=16px */
+  --text-small: 0.875rem;
+  --text-mono: 0.8125rem;
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-dusk-bg: var(--bg);
+  --color-dusk-surface: var(--surface);
+  --color-dusk-ink: var(--ink);
+  --color-dusk-ink-secondary: var(--ink-secondary);
+  --color-dusk-line: var(--line);
+  --color-dusk-copper: var(--copper);
+  --font-sans: var(--font-cabinet);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
+  color: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-cabinet), system-ui, sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.6;
 }
