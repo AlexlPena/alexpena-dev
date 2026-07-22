@@ -7,7 +7,7 @@ export function Request() {
   return (
     <section
       aria-label="The request"
-      className="absolute inset-x-0 flex h-screen items-center"
+      className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
       style={{ top: `${topVhForRest(REST_POINTS.actII)}vh` }}
     >
       <div className="mx-auto w-full max-w-2xl px-6">

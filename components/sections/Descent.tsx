@@ -20,7 +20,7 @@ export function Descent() {
           key={stratum.id}
           id={stratum.id}
           aria-label={`${stratum.era}, ${stratum.year}`}
-          className="absolute inset-x-0 flex h-screen items-center"
+          className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
           style={{ top: `${topVhForRest(STRATUM_REST[i])}vh` }}
         >
           <div className="mx-auto w-full max-w-2xl px-6">

@@ -8,7 +8,7 @@ export function Surface() {
   return (
     <section
       aria-label="Introduction"
-      className="absolute inset-x-0 flex h-screen items-center"
+      className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
       style={{ top: `${topVhForRest(REST_POINTS.actI)}vh` }}
     >
       <div className="mx-auto w-full max-w-3xl px-6">

@@ -9,7 +9,7 @@ export function Daylight() {
   return (
     <section
       aria-label="About and contact"
-      className="absolute inset-x-0 flex h-screen items-center"
+      className="absolute inset-x-0 flex h-screen items-center pointer-events-none"
       style={{ top: `${topVhForRest(REST_POINTS.actVI)}vh` }}
     >
       <div className="mx-auto w-full max-w-2xl px-6">
@@ -35,7 +35,7 @@ export function Daylight() {
             <a
               key={link.href}
               href={link.href}
-              className="text-body text-dusk-ink underline decoration-dusk-copper underline-offset-4 hover:text-dusk-copper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dusk-copper"
+              className="pointer-events-auto text-body text-dusk-ink underline decoration-dusk-copper underline-offset-4 hover:text-dusk-copper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-dusk-copper"
             >
               {link.label}
             </a>
