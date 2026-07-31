@@ -41,4 +41,10 @@ describe("monogram timeline", () => {
   test("total duration covers assembly, hold and dissolve", () => {
     expect(totalDuration()).toBeCloseTo(2.75, 5);
   });
+
+  test("the last chunk lands near the end of the assembly window", () => {
+    const latest = Math.max(...anims.map((a) => a.delay + a.duration));
+    expect(latest).toBeGreaterThan(TIMING.assembly - 0.15);
+    expect(latest).toBeLessThanOrEqual(TIMING.assembly + 1e-9);
+  });
 });

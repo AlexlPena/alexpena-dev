@@ -34,8 +34,11 @@ export function buildAnimations(chunks: Chunk[] = CHUNKS): ChunkAnimation[] {
   const cx = VIEWBOX.width / 2;
   const cy = VIEWBOX.height / 2;
   const duration = 0.9;
-  // Large chunks finish at ~1.4s, small ones at the full 2.0s.
+  // Weight-based staggering: structure pieces (weight 1.0) start at 0, large
+  // secondary pieces (0.6) start ~0.4s in, and smallest stems (0.3) stagger to
+  // land near the end of the assembly window (~2.0s).
   const latest = TIMING.assembly - duration;
+  const MIN_WEIGHT = 0.3;
 
   return chunks.map((chunk) => {
     const r1 = hash(chunk.id);
@@ -48,9 +51,13 @@ export function buildAnimations(chunks: Chunk[] = CHUNKS): ChunkAnimation[] {
     // Close in, not distant: ~0.55x-1.05x the half-diagonal of the logo box.
     const distance = 45 + r1 * 45;
 
+    // Normalise so the lightest chunks actually reach the end of the assembly
+    // window; without this the last chunk lands early and the hold reads long.
+    const spread = (1 - weight) / (1 - MIN_WEIGHT);
+
     return {
       id: chunk.id,
-      delay: Number((latest * (1 - weight) * (0.6 + 0.4 * r2)).toFixed(4)),
+      delay: Number((latest * spread * (0.6 + 0.4 * r2)).toFixed(4)),
       duration,
       from: {
         x: Number(((dirX / len) * distance).toFixed(4)),
