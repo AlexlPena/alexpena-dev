@@ -48,7 +48,7 @@ above the canvas. Spec section 1a says the same thing.
 
 1. **Deploy** to alexpena.dev (Vercel).
 2. **Page metadata** — `app/layout.tsx` currently hardcodes title/description; source
-   them from `lib/content/identity.ts` instead. Add an OG image.
+   them from `lib/content/identity.ts` instead.
 3. **Contact URLs** — `lib/content/contact.ts` has only the mailto entry; it carries a
    deliberate TODO because GitHub and LinkedIn URLs were never supplied. They must
    come from Alex; do not invent them.
