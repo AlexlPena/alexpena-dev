@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { hasSeenIntro, markIntroSeen } from "@/lib/intro/introGate";
+import { MonogramScene } from "./MonogramScene";
 
 type Phase = "checking" | "playing" | "dismissed";
 
@@ -21,6 +22,10 @@ export function IntroGate() {
     );
   }, []);
 
+  // MonogramScene dissolves this element at the end of its timeline. It must be
+  // the overlay itself — fading only the canvas would leave this opaque backdrop.
+  const overlayRef = useRef<HTMLDivElement>(null);
+
   const dismiss = useCallback(() => {
     // Dismiss first so a storage failure can never trap the visitor behind
     // the scroll-locked overlay; the write is best-effort after that.
@@ -30,8 +35,8 @@ export function IntroGate() {
 
   // Lock the page underneath while the overlay is up; restore on dismiss/unmount.
   // Also owns two failsafes tied to the same "playing" lifecycle: an escape-key
-  // listener, and a timeout in case the video never fires onEnded/onError
-  // (blocked autoplay, stalled network, etc).
+  // listener, and a timeout in case the scene never calls onComplete
+  // (WebGL failure, stalled animation, etc).
   useLayoutEffect(() => {
     if (phase !== "playing") return;
 
@@ -45,8 +50,8 @@ export function IntroGate() {
     };
     window.addEventListener("keydown", onKeyDown);
 
-    // The video is ~8s; 10s gives it headroom before we assume it's stuck.
-    const failsafe = window.setTimeout(dismiss, 10_000);
+    // The sequence is ~2.75s; 6s gives it headroom before we assume it's stuck.
+    const failsafe = window.setTimeout(dismiss, 6_000);
 
     return () => {
       document.body.style.overflow = previousOverflow;
@@ -60,22 +65,14 @@ export function IntroGate() {
 
   return (
     <div
+      ref={overlayRef}
       className="fixed inset-0 z-50 flex items-center justify-center bg-dusk-bg"
       role="dialog"
       aria-modal="true"
       aria-label="Site intro"
       data-lenis-prevent
     >
-      <video
-        className="h-full w-full object-cover"
-        src="/intro/hero-loop.mp4"
-        poster="/intro/hero-loop-poster.jpg"
-        autoPlay
-        muted
-        playsInline
-        onEnded={dismiss}
-        onError={dismiss}
-      />
+      <MonogramScene onComplete={dismiss} fadeTargetRef={overlayRef} />
       <button
         type="button"
         onClick={dismiss}
