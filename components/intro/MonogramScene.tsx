@@ -139,11 +139,6 @@ export function MonogramScene({ onComplete, fadeTargetRef }: Props) {
           renderer.setSize(container.clientWidth, container.clientHeight);
         };
         fitCamera();
-        // Paint the scattered-chunks starting frame immediately. The GSAP
-        // timeline's onUpdate only fires on the next rAF tick, so without this
-        // the alpha:false canvas can show one undefined/black frame first —
-        // visible since this is the opening instant of the intro.
-        renderer.render(scene, camera);
 
         timeline = gsap.timeline({
           onUpdate: () => renderer.render(scene, camera),
@@ -169,6 +164,13 @@ export function MonogramScene({ onComplete, fadeTargetRef }: Props) {
             anim.delay,
           );
         }
+
+        // Every mesh now sits at its scattered `from` position/rotation, set
+        // by the loop above. Paint that scattered starting frame immediately:
+        // the GSAP timeline's onUpdate only fires on the next rAF tick, so
+        // without this the alpha:false canvas would show one undefined/black
+        // frame first — visible since this is the opening instant of the intro.
+        renderer.render(scene, camera);
 
         // Hold on the locked monogram, then dissolve the whole overlay — not
         // just the canvas, which would leave the opaque bg-dusk-bg backdrop
