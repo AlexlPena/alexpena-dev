@@ -21,7 +21,17 @@ export function IntroGate() {
     );
   }, []);
 
+  const dismiss = useCallback(() => {
+    // Dismiss first so a storage failure can never trap the visitor behind
+    // the scroll-locked overlay; the write is best-effort after that.
+    setPhase("dismissed");
+    markIntroSeen(window.localStorage);
+  }, []);
+
   // Lock the page underneath while the overlay is up; restore on dismiss/unmount.
+  // Also owns two failsafes tied to the same "playing" lifecycle: an escape-key
+  // listener, and a timeout in case the video never fires onEnded/onError
+  // (blocked autoplay, stalled network, etc).
   useLayoutEffect(() => {
     if (phase !== "playing") return;
 
@@ -30,21 +40,32 @@ export function IntroGate() {
     document.body.style.overflow = "hidden";
     main?.setAttribute("inert", "");
 
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") dismiss();
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    // The video is ~8s; 10s gives it headroom before we assume it's stuck.
+    const failsafe = window.setTimeout(dismiss, 10_000);
+
     return () => {
       document.body.style.overflow = previousOverflow;
       main?.removeAttribute("inert");
+      window.removeEventListener("keydown", onKeyDown);
+      window.clearTimeout(failsafe);
     };
-  }, [phase]);
-
-  const dismiss = useCallback(() => {
-    markIntroSeen(window.localStorage);
-    setPhase("dismissed");
-  }, []);
+  }, [phase, dismiss]);
 
   if (phase !== "playing") return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-dusk-bg">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-dusk-bg"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Site intro"
+      data-lenis-prevent
+    >
       <video
         className="h-full w-full object-cover"
         src="/intro/hero-loop.mp4"
@@ -53,6 +74,7 @@ export function IntroGate() {
         muted
         playsInline
         onEnded={dismiss}
+        onError={dismiss}
       />
       <button
         type="button"

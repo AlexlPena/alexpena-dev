@@ -5,6 +5,7 @@ import { IntroGate } from "@/components/intro/IntroGate";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://alexpena.dev"),
   title: "Alex Pena — AI Solutions Specialist",
   description:
     "I build AI systems, automations, and the context that makes them work.",
