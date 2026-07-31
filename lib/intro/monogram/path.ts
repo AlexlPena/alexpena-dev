@@ -12,7 +12,7 @@ const ARITY = { M: 2, L: 2, C: 6, Z: 0 } as const;
  * silently mis-drawn, since every path in this project is generated code.
  */
 export function parsePath(d: string): PathCommand[] {
-  const tokens = d.match(/[MLCZmlczaAhHvVsSqQtT]|-?\d*\.?\d+(?:e[-+]?\d+)?/gi) ?? [];
+  const tokens = d.match(/[A-Za-z]|-?\d*\.?\d+(?:e[-+]?\d+)?/gi) ?? [];
   const out: PathCommand[] = [];
   let i = 0;
   let current: keyof typeof ARITY | null = null;

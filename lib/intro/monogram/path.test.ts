@@ -43,4 +43,12 @@ describe("parsePath", () => {
   test("throws when a command has too few numbers", () => {
     expect(() => parsePath("M 0")).toThrow(/expected/i);
   });
+
+  test("throws on stray unrecognized letters rather than silently mis-parsing", () => {
+    expect(() => parsePath("M 0 0 X 1 1")).toThrow(/unsupported/i);
+  });
+
+  test("throws on arc commands", () => {
+    expect(() => parsePath("M 0 0 A 1 1 0 0 1 2 2")).toThrow(/unsupported/i);
+  });
 });
