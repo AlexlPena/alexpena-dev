@@ -23,14 +23,32 @@ describe("monogram geometry", () => {
     geo.dispose();
   });
 
-  test("geometry is centred on the origin so rotations pivot about the chunk", () => {
+  test("asymmetric chunks pivot on their centroid, not their bounding box", () => {
+    // a-skeleton's vertex-average centroid sits well above its bbox centre, so a
+    // correctly centroid-pivoted geometry has a bbox that is NOT centred on origin.
+    const chunk = CHUNKS.find((c) => c.id === "a-skeleton")!;
+    const geo = buildChunkGeometry(chunk);
+    geo.computeBoundingBox();
+    const box = geo.boundingBox!;
+    const cy = (box.min.y + box.max.y) / 2;
+    expect(Math.abs(cy)).toBeGreaterThan(1);
+    geo.dispose();
+  });
+
+  test("extrusion is centred on its mid-plane in z", () => {
     const geo = buildChunkGeometry(CHUNKS[0]);
     geo.computeBoundingBox();
     const box = geo.boundingBox!;
-    const cx = (box.min.x + box.max.x) / 2;
-    const cy = (box.min.y + box.max.y) / 2;
-    expect(Math.abs(cx)).toBeLessThan(0.01);
-    expect(Math.abs(cy)).toBeLessThan(0.01);
+    const cz = (box.min.z + box.max.z) / 2;
+    expect(Math.abs(cz)).toBeLessThan(0.01);
+    geo.dispose();
+  });
+
+  test("the curved bowl chunk also exposes both material groups", () => {
+    const chunk = CHUNKS.find((c) => c.id === "p-bowl")!;
+    const geo = buildChunkGeometry(chunk);
+    const indices = [...new Set(geo.groups.map((g) => g.materialIndex))].sort();
+    expect(indices).toEqual([0, 1]);
     geo.dispose();
   });
 });

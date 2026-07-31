@@ -33,7 +33,13 @@ export function buildChunkGeometry(chunk: Chunk): ExtrudeGeometry {
     bevelSegments: 2,
     curveSegments: 24,
   });
-  // Centre so each chunk rotates about itself rather than the world origin.
-  geometry.center();
+  // Pivot on the chunk's own centroid — NOT geometry.center(), which uses the
+  // bounding-box centre and diverges from chunk.centroid for asymmetric chunks
+  // (a-skeleton by ~6 units), misplacing them when the consumer positions by centroid.
+  geometry.translate(
+    -chunk.centroid.u,
+    -(VIEWBOX.height - chunk.centroid.v),
+    -EXTRUDE_DEPTH / 2,
+  );
   return geometry;
 }
