@@ -20,10 +20,11 @@ export const METRICS = {
     baselineV: 100.0,
     crossbarTopV: 67.6,
     crossbarBottomV: 83.1,
-    // Cuts across the legs, as v values. Tilt is du/dv applied to the cut line
-    // so seams are angled rather than dead horizontal, matching the reference.
+    // The skeleton/left-leg boundary, as a v value; this seam is flat (both
+    // sides agree on the same line, so no crack results). leftCuts below carry
+    // their own tilt: du/dv applied to the cut line so those seams are angled
+    // rather than dead horizontal, matching the reference.
     skeletonCutV: 45.0,
-    skeletonCutTilt: 0.10,
     leftCuts: [
       { v: 68.0, tilt: -0.08 },
       { v: 86.0, tilt: 0.06 },
