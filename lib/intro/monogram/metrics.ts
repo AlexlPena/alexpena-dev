@@ -38,7 +38,11 @@ export const METRICS = {
     bottomV: 97.7,
     bowlOuterU: 143.5,
     bowlBottomV: 68.5,
-    counterLeftU: 97.1,
+    // Measured 97.1, but the bowl's outer edge anchors to stemRightU at v=0 and
+    // v=68.5 while this corner sat 0.8u to its right, so the straight segments
+    // connecting them left a background wedge instead of meeting the stem.
+    // chunks.ts derives the counter's actual left anchor from stemRightU (with
+    // a hair of overlap) instead of using this measurement directly.
     counterRightU: 124.9,
     counterTopV: 20.0,
     counterBottomV: 53.0,

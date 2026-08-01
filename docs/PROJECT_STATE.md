@@ -56,15 +56,19 @@ above the canvas. Spec section 1a says the same thing.
    confirm the Fontshare EULA covers self-hosted webfont use. (It's the standard
    Fontshare FFL; this is a formality, not a known problem.)
 
-## First-visit intro gate (2026-07-30)
+## First-visit intro gate (2026-07-30, monogram rebuilt 2026-07-31)
 
-Shipped: a video intro (`public/intro/hero-loop.mp4`, an 8s Higgsfield
-Seedance 2.0 generation — the first real output of the AI Content Pipeline
-project, see the "Portfolio Projects" Notion database) plays once for
-first-time visitors, gated via `localStorage` (`lib/intro/introGate.ts`),
-skipped for `prefers-reduced-motion` visitors and repeat visitors alike.
-Favicon and OG image (`app/favicon.ico`, `app/opengraph-image.png`) are
-cropped from the same clip's opening AP-monogram frame.
+Shipped: a live-rendered "AP" monogram intro plays once for first-time
+visitors, gated via `localStorage` (`lib/intro/introGate.ts`), skipped for
+`prefers-reduced-motion` visitors and repeat visitors alike. The monogram is
+12 extruded 3D chunks (`lib/intro/monogram/`) that fly in and assemble via
+GSAP, then dissolve to reveal the site, ~2.75s total. It renders with
+three.js, dynamically imported (`components/intro/MonogramScene.tsx`) so
+returning visitors — who skip the gate entirely — fetch none of it. The
+original video intro (`public/intro/hero-loop.mp4`, an 8s Higgsfield
+Seedance 2.0 generation) has been removed along with the rest of
+`public/intro/`; favicon and OG image (`app/favicon.ico`,
+`app/opengraph-image.png`) are unaffected.
 
 Rollback point: git tag `pre-intro-gate` (commit `824d504`), plus the prior
 Vercel production deployment, which remains promotable if this needs to be

@@ -1,6 +1,19 @@
 import { describe, expect, test } from "vitest";
-import { parsePath } from "./path";
+import { parsePath, type PathCommand } from "./path";
 import { CHUNKS, VIEWBOX } from "./chunks";
+import { METRICS } from "./metrics";
+
+/** Extracts every M/L endpoint plus C control and end points from a path. */
+function allXY(cmds: PathCommand[]): Array<{ x: number; y: number }> {
+  const out: Array<{ x: number; y: number }> = [];
+  for (const cmd of cmds) {
+    if (cmd.type === "M" || cmd.type === "L") out.push({ x: cmd.x, y: cmd.y });
+    else if (cmd.type === "C") {
+      out.push({ x: cmd.x1, y: cmd.y1 }, { x: cmd.x2, y: cmd.y2 }, { x: cmd.x, y: cmd.y });
+    }
+  }
+  return out;
+}
 
 describe("monogram chunks", () => {
   test("has twelve chunks, six per letter", () => {
@@ -55,5 +68,47 @@ describe("monogram chunks", () => {
     const copper = CHUNKS.filter((c) => c.material === "copper");
     expect(Math.min(...copper.map((c) => c.centroid.u))).toBeGreaterThan(70);
     expect(Math.min(...ink.map((c) => c.centroid.u))).toBeLessThan(50);
+  });
+
+  test("the bowl's counter (hole) never drifts right of the stem's edge", () => {
+    const bowl = CHUNKS.find((c) => c.id === "p-bowl")!;
+    const points = allXY(parsePath(bowl.d));
+    // The bowl's stem-facing points (the M anchor, and the counter's near
+    // corners) sit far to the left of the counter's far side and the outer
+    // bowl sweep's control points (a gap of ~25+ units); the midpoint below
+    // cleanly separates "stem-facing" points from the rest of the curve.
+    const stemFacing = points.filter(
+      (pt) => pt.x < (METRICS.p.counterRightU + METRICS.p.stemRightU) / 2,
+    );
+    expect(stemFacing.length).toBeGreaterThan(0);
+    for (const pt of stemFacing) {
+      expect(pt.x).toBeLessThanOrEqual(METRICS.p.stemRightU);
+    }
+  });
+
+  test("consecutive A left-leg slabs share their edge exactly", () => {
+    const ids = ["a-left-mid", "a-left-lower", "a-left-foot"];
+    const slabs = ids.map((id) => {
+      const chunk = CHUNKS.find((c) => c.id === id)!;
+      const cmds = parsePath(chunk.d).filter(
+        (cmd): cmd is Extract<PathCommand, { type: "M" | "L" }> =>
+          cmd.type === "M" || cmd.type === "L",
+      );
+      // polygon() emits M(topOuter) L(topInner) L(bottomInner) L(bottomOuter) Z.
+      return { topOuter: cmds[0], topInner: cmds[1], bottomInner: cmds[2], bottomOuter: cmds[3] };
+    });
+
+    for (let i = 0; i < slabs.length - 1; i++) {
+      const upper = slabs[i];
+      const lower = slabs[i + 1];
+      expect([lower.topOuter.x, lower.topOuter.y], `slab ${i} outer edge`).toEqual([
+        upper.bottomOuter.x,
+        upper.bottomOuter.y,
+      ]);
+      expect([lower.topInner.x, lower.topInner.y], `slab ${i} inner edge`).toEqual([
+        upper.bottomInner.x,
+        upper.bottomInner.y,
+      ]);
+    }
   });
 });
