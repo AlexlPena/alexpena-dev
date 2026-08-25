@@ -1,31 +1,59 @@
 import { describe, expect, it } from "vitest";
-import { revealAt, staggerAt } from "./reveal";
+import { revealFromRect, staggerAt, staggerDelay } from "./reveal";
 
-describe("revealAt", () => {
-  it("is fully drawn exactly at the rest point", () => {
-    expect(revealAt(0.4, 0.4)).toBe(1);
+const VH = 900;
+const H = 400;
+
+describe("revealFromRect", () => {
+  it("is unstarted the instant the figure's top touches the fold", () => {
+    expect(revealFromRect(VH, H, VH)).toBe(0);
   });
 
-  it("is unstarted a full lead before the rest point", () => {
-    expect(revealAt(0.32, 0.4, 0.08)).toBe(0);
-    expect(revealAt(0.2, 0.4, 0.08)).toBe(0);
+  it("is still unstarted while the figure is entirely below the fold", () => {
+    expect(revealFromRect(VH + 300, H, VH)).toBe(0);
   });
 
-  it("is halfway at half a lead out", () => {
-    expect(revealAt(0.36, 0.4, 0.08)).toBeCloseTo(0.5, 6);
+  it("completes only once the figure has settled above the fold", () => {
+    const settle = 0.18;
+    // Bottom edge exactly `settle` of a viewport above the fold.
+    const top = VH * (1 - settle) - H;
+    expect(revealFromRect(top, H, VH, settle)).toBeCloseTo(1, 6);
   });
 
-  it("stays drawn after the section has passed", () => {
-    expect(revealAt(0.9, 0.4)).toBe(1);
+  it("is only part-drawn when just the top sliver is showing", () => {
+    // This is the case that looked wrong: a figure barely peeking in must not
+    // already be most of the way through its draw.
+    const justPeeking = VH - 40;
+    expect(revealFromRect(justPeeking, H, VH)).toBeLessThan(0.1);
   });
 
-  it("degrades to a hard switch when there is no lead", () => {
-    expect(revealAt(0.39, 0.4, 0)).toBe(0);
-    expect(revealAt(0.4, 0.4, 0)).toBe(1);
+  it("is past halfway only once a good part of the figure is on screen", () => {
+    const halfShowing = VH - H / 2;
+    const v = revealFromRect(halfShowing, H, VH);
+    expect(v).toBeGreaterThan(0.2);
+    expect(v).toBeLessThan(0.6);
   });
 
-  it("returns 0 for non-finite progress rather than NaN", () => {
-    expect(revealAt(Number.NaN, 0.4)).toBe(0);
+  it("stays drawn once the figure has scrolled above the viewport", () => {
+    expect(revealFromRect(-500, H, VH)).toBe(1);
+  });
+
+  it("finishes later with a larger settle", () => {
+    const top = VH - H;
+    expect(revealFromRect(top, H, VH, 0.3)).toBeLessThan(
+      revealFromRect(top, H, VH, 0.05)
+    );
+  });
+
+  it("handles a figure taller than the viewport without stalling at zero", () => {
+    const tall = VH * 2;
+    expect(revealFromRect(VH - 100, tall, VH)).toBeGreaterThan(0);
+    expect(revealFromRect(-tall, tall, VH)).toBe(1);
+  });
+
+  it("returns 0 rather than NaN for a non-finite rect or dead viewport", () => {
+    expect(revealFromRect(Number.NaN, H, VH)).toBe(0);
+    expect(revealFromRect(100, H, 0)).toBe(0);
   });
 });
 
@@ -37,16 +65,12 @@ describe("staggerAt", () => {
   });
 
   it("starts earlier elements before later ones", () => {
-    const mid = 0.5;
-    const first = staggerAt(mid, 0, 5);
-    const last = staggerAt(mid, 4, 5);
-    expect(first).toBeGreaterThan(last);
+    expect(staggerAt(0.5, 0, 5)).toBeGreaterThan(staggerAt(0.5, 4, 5));
   });
 
   it("leaves the last element still running when the first has finished", () => {
-    const r = 0.75;
-    expect(staggerAt(r, 0, 5)).toBe(1);
-    expect(staggerAt(r, 4, 5)).toBeLessThan(1);
+    expect(staggerAt(0.75, 0, 5)).toBe(1);
+    expect(staggerAt(0.75, 4, 5)).toBeLessThan(1);
   });
 
   it("treats a single element as ungated", () => {
@@ -61,5 +85,23 @@ describe("staggerAt", () => {
         expect(v).toBeLessThanOrEqual(1);
       }
     }
+  });
+});
+
+describe("staggerDelay", () => {
+  it("puts the first element at zero and the last at 1 - run", () => {
+    expect(staggerDelay(0, 5, 0.55)).toBe(0);
+    expect(staggerDelay(4, 5, 0.55)).toBeCloseTo(0.45, 10);
+  });
+
+  it("agrees with staggerAt's own gating", () => {
+    for (let i = 0; i < 5; i++) {
+      const d = staggerDelay(i, 5);
+      expect(staggerAt(d, i, 5)).toBeCloseTo(0, 10);
+    }
+  });
+
+  it("is zero for a lone element", () => {
+    expect(staggerDelay(0, 1)).toBe(0);
   });
 });

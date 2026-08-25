@@ -48,10 +48,7 @@ export function Descent() {
                 </p>
               </div>
 
-              <Reveal
-                rest={STRATUM_REST[i]}
-                className="lg:col-span-6 lg:col-start-7"
-              >
+              <Reveal className="lg:col-span-6 lg:col-start-7">
                 <Figure />
               </Reveal>
             </div>

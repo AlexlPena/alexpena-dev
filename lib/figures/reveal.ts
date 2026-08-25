@@ -1,19 +1,39 @@
-// Maps journey progress onto a 0..1 reveal for a figure anchored at a rest
-// point. Pure so the timing is testable without a DOM, matching lib/scroll.
+// Timing for figures that draw themselves as they scroll into view. Pure, so
+// the mapping is testable without a DOM, matching how lib/scroll is organised.
 
 function clamp01(x: number): number {
   return Math.min(1, Math.max(0, x));
 }
 
 /**
- * A figure finishes drawing exactly as its section comes to rest, so the
- * visitor arrives at a completed image rather than watching it assemble.
- * `lead` is how much progress the draw occupies before that.
+ * Reveal from the figure's own box, not from journey progress.
+ *
+ * Progress-based timing has to assume where the figure sits inside its
+ * section, and that assumption is wrong on at least one layout: the strata put
+ * the figure beside the text on wide screens and below it on narrow ones, so
+ * the same rest point puts the figure in completely different places. Tying
+ * the draw to the element means it starts when the figure actually appears and
+ * finishes when it is actually settled, on every viewport.
+ *
+ * @param top      the figure's top edge, relative to the viewport
+ * @param height   the figure's height
+ * @param viewport the viewport height
+ * @param settle   how far above the fold the figure's bottom must reach for
+ *                 the draw to complete, as a fraction of the viewport. Larger
+ *                 finishes later.
  */
-export function revealAt(progress: number, rest: number, lead = 0.08): number {
-  if (!Number.isFinite(progress)) return 0;
-  if (lead <= 0) return progress >= rest ? 1 : 0;
-  return clamp01((progress - (rest - lead)) / lead);
+export function revealFromRect(
+  top: number,
+  height: number,
+  viewport: number,
+  settle = 0.18
+): number {
+  if (!Number.isFinite(top) || viewport <= 0) return 0;
+  // Zero at the moment the top edge touches the bottom of the viewport, one
+  // once the bottom edge has climbed `settle` of a viewport above the fold.
+  const span = viewport * settle + Math.max(0, height);
+  if (span <= 0) return top <= 0 ? 1 : 0;
+  return clamp01((viewport - top) / span);
 }
 
 /**
