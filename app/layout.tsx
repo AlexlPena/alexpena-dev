@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cabinet, mono } from "./fonts";
 import { ScrollProvider } from "@/components/providers/ScrollProvider";
-import { IntroGate } from "@/components/intro/IntroGate";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,10 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cabinet.variable} ${mono.variable}`}>
       <body>
-        <ScrollProvider>
-          <IntroGate />
-          {children}
-        </ScrollProvider>
+        <ScrollProvider>{children}</ScrollProvider>
       </body>
     </html>
   );

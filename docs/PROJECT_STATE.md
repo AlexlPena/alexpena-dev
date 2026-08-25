@@ -1,6 +1,6 @@
 # Project state — alexpena.dev
 
-Last updated: 2026-07-22
+Last updated: 2026-08-25
 
 This file is the durable handoff: where the project stands, what's decided, what's
 open, and what a future session needs to know. (The blow-by-blow build ledger lives
@@ -9,11 +9,13 @@ matters long-term belongs here instead.)
 
 ## Where things stand
 
-**The site is finished and publishable, minus deployment.** It is the six-act dusk
+**The site is live at https://alexpena-dev.vercel.app.** It is the six-act dusk
 journey in pure DOM: scroll drives a light → dark → light theme arc while the
 narrative descends through four eras of Alex's craft and resurfaces for contact.
+Act III's four strata now each carry a figure (see below).
 
-- `master` is clean, all work merged, 33 tests passing (`typecheck`/`lint`/`test`/`build` all green).
+- `main` is clean, all work merged, 49 tests passing (`typecheck`/`lint`/`test`/`build` all green).
+- Deploys are automatic: pushing `main` promotes to production on Vercel.
 - Built across four milestones (foundation → shell → world → refinement), each one
   planned, implemented task-by-task with per-task review, and closed with a
   whole-branch review before merge.
@@ -46,7 +48,11 @@ above the canvas. Spec section 1a says the same thing.
 
 ## What's left to ship (Milestone 6)
 
-1. **Deploy** to alexpena.dev (Vercel).
+1. **The apex domain.** `alexpena.dev` does not point at Vercel — it resolves to
+   Render (`216.24.57.x`, behind Cloudflare) and returns `402 Payment Required`
+   from a suspended service. Until that DNS moves, `metadataBase` in
+   `app/layout.tsx` advertises a dead host in every OG/canonical URL. The live
+   site is `alexpena-dev.vercel.app`.
 2. **Page metadata** — `app/layout.tsx` currently hardcodes title/description; source
    them from `lib/content/identity.ts` instead.
 3. **Contact URLs** — `lib/content/contact.ts` has only the mailto entry; it carries a
@@ -56,23 +62,47 @@ above the canvas. Spec section 1a says the same thing.
    confirm the Fontshare EULA covers self-hosted webfont use. (It's the standard
    Fontshare FFL; this is a formality, not a known problem.)
 
-## First-visit intro gate (2026-07-30, monogram rebuilt 2026-07-31)
+## The intro gate is gone (2026-08-25)
 
-Shipped: a live-rendered "AP" monogram intro plays once for first-time
-visitors, gated via `localStorage` (`lib/intro/introGate.ts`), skipped for
-`prefers-reduced-motion` visitors and repeat visitors alike. The monogram is
-12 extruded 3D chunks (`lib/intro/monogram/`) that fly in and assemble via
-GSAP, then dissolve to reveal the site, ~2.75s total. It renders with
-three.js, dynamically imported (`components/intro/MonogramScene.tsx`) so
-returning visitors — who skip the gate entirely — fetch none of it. The
-original video intro (`public/intro/hero-loop.mp4`, an 8s Higgsfield
-Seedance 2.0 generation) has been removed along with the rest of
-`public/intro/`; favicon and OG image (`app/favicon.ico`,
-`app/opengraph-image.png`) are unaffected.
+The first-visit "AP" monogram intro was built (2026-07-30, monogram rebuilt
+2026-07-31), shipped to production on 2026-08-25, and **removed the same day**
+— Alex reviewed it live and judged it too much. The whole feature is deleted:
+`components/intro/`, `lib/intro/`, the `<IntroGate />` mount in
+`app/layout.tsx`, and 34 tests. `three` and `@types/three` went with it —
+`lib/intro/monogram/geometry.ts` was the only importer, and the bundle now
+contains no three.js at all.
 
-Rollback point: git tag `pre-intro-gate` (commit `824d504`), plus the prior
-Vercel production deployment, which remains promotable if this needs to be
-reverted.
+The site loads straight into Act I. There is no overlay, no scroll lock, no
+localStorage gate, no canvas.
+
+Rollback point: git tag **`pre-intro-removal`** (commit `3f3e830`), which is
+the last state with it live. Earlier tags `pre-intro-gate` and
+`pre-live-monogram` still mark the states before it existed.
+
+Do not rebuild this without asking. It has now been through video → live 3D →
+removed; the decision is that the site opens on the work, not on a title card.
+
+## Figures in the descent (2026-08-25)
+
+Act III's four strata each carry a diagram of their discipline
+(`components/figures/strata/`), drawn as the section comes to rest. They are
+arguments, not dashboards — **no measured quantities anywhere**, so the public
+site hosts no invented metrics.
+
+- Reveal is driven from journey progress by `<Reveal>` writing one custom
+  property; it never calls setState, because this runs every scroll frame
+  beside the theme interpolation. Timing lives in `lib/figures/reveal.ts`.
+- The layout is deliberately asymmetric (text 5 of 12 columns, figure 6, one
+  empty between). The rest of the journey is a centred single column and these
+  have to read differently.
+- `lib/theme/palette.ts` carries a figure ramp (`fig1..fig5`, `figMute`) that
+  interpolates with dusk like every other token. Its dark pole is stepped
+  against `#2e2b29` — the background at dusk 0.55, the lightest field a figure
+  rests on in the dark half — not against `#12100e`.
+
+A short-lived `/lab` review route and six placeholder-data charts existed on
+2026-08-25 and were removed the same day; see git history if real numbers ever
+justify rebuilding them.
 
 ## Design decisions worth not relitigating
 
