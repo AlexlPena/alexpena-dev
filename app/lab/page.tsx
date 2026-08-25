@@ -6,6 +6,8 @@ import { MigrationBars } from "@/components/figures/MigrationBars";
 import { AdoptionArea } from "@/components/figures/AdoptionArea";
 import { RunHeatmap } from "@/components/figures/RunHeatmap";
 import { StatRow } from "@/components/figures/StatRow";
+import { duskToTokens } from "@/lib/theme/palette";
+import { tokensToStyle } from "@/lib/theme/applyTokens";
 import {
   ADOPTION,
   CASE_STUDIES_ARE_DRAFT,
@@ -124,16 +126,23 @@ function FigureSet() {
   );
 }
 
-function Panel({ surface }: { surface: "light" | "dark" }) {
+// Pins the subtree to one dusk value using the same interpolation the scroll
+// journey runs, so a panel here is exactly what the visitor sees at that point
+// in the descent — no duplicated hexes to drift out of sync.
+function Panel({ dusk, caption }: { dusk: number; caption: string }) {
+  const tokens = duskToTokens(dusk);
   return (
     <section
-      data-surface={surface}
+      style={tokensToStyle(tokens)}
       className="bg-dusk-bg py-20"
-      aria-label={`Figures on the ${surface} pole`}
+      aria-label={`Figures at dusk ${dusk}`}
     >
       <div className="mx-auto mb-16 w-full max-w-4xl px-6">
         <p className="font-mono text-mono-size uppercase tracking-[0.14em] text-dusk-copper">
-          {surface === "light" ? "Light pole · dusk 0" : "Dark pole · dusk 1"}
+          Dusk {dusk} · {caption}
+        </p>
+        <p className="mt-2 font-mono text-mono-size text-dusk-ink-secondary">
+          bg {tokens.bg} · ramp {tokens.fig1} → {tokens.fig5}
         </p>
       </div>
       <FigureSet />
@@ -146,7 +155,7 @@ export default function FigureLab() {
     <main>
       {CASE_STUDIES_ARE_DRAFT ? (
         <div
-          data-surface="light"
+          style={tokensToStyle(duskToTokens(0))}
           className="border-b-2 border-dusk-copper bg-dusk-bg px-6 py-4"
         >
           <div className="mx-auto w-full max-w-4xl">
@@ -162,8 +171,12 @@ export default function FigureLab() {
         </div>
       ) : null}
 
-      <Panel surface="light" />
-      <Panel surface="dark" />
+      {/* Three real resting points from the journey, not two invented poles.
+          0.55 is the first plateau of the descent and the lightest background
+          a figure ever sits on in the dark half — the binding case. */}
+      <Panel dusk={0} caption="Act I · full light" />
+      <Panel dusk={0.55} caption="Stratum 2 · mid descent" />
+      <Panel dusk={1} caption="Act IV · full dark" />
     </main>
   );
 }
