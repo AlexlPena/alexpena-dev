@@ -136,7 +136,7 @@ export function LoopFigure() {
         </text>
         <text
           x={HUMAN.x}
-          y={HUMAN.y + 41}
+          y={HUMAN.y + 46}
           textAnchor="middle"
           fill="var(--ink-secondary)"
           fontSize="11"

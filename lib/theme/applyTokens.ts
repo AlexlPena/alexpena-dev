@@ -16,10 +16,36 @@ const VAR_NAMES: Record<keyof ThemeTokens, string> = {
   figMute: "--fig-mute",
 };
 
-export function applyTokens(el: HTMLElement, tokens: ThemeTokens): void {
-  for (const key of Object.keys(tokens) as (keyof ThemeTokens)[]) {
-    el.style.setProperty(VAR_NAMES[key], tokens[key]);
+const KEYS = Object.keys(VAR_NAMES) as (keyof ThemeTokens)[];
+
+// Last value written per element. Every setProperty on <html> invalidates
+// style for the whole document, so writing a token that did not change is
+// pure cost — and most of them don't on most frames: ink and the figure ramp
+// snap across a 0.1-wide band and are constant everywhere else.
+const applied = new WeakMap<HTMLElement, ThemeTokens>();
+
+/**
+ * Writes only the tokens whose value actually changed. Returns how many were
+ * written, which is what the perf test asserts against.
+ */
+export function applyTokens(el: HTMLElement, tokens: ThemeTokens): number {
+  const prev = applied.get(el);
+  let written = 0;
+
+  for (const key of KEYS) {
+    const next = tokens[key];
+    if (prev && prev[key] === next) continue;
+    el.style.setProperty(VAR_NAMES[key], next);
+    written++;
   }
+
+  if (written > 0) applied.set(el, tokens);
+  return written;
+}
+
+/** Drops the memo so the next apply writes every token. For teardown/tests. */
+export function resetAppliedTokens(el: HTMLElement): void {
+  applied.delete(el);
 }
 
 /**
@@ -29,8 +55,6 @@ export function applyTokens(el: HTMLElement, tokens: ThemeTokens): void {
  */
 export function tokensToStyle(tokens: ThemeTokens): CSSProperties {
   const style: Record<string, string> = {};
-  for (const key of Object.keys(tokens) as (keyof ThemeTokens)[]) {
-    style[VAR_NAMES[key]] = tokens[key];
-  }
+  for (const key of KEYS) style[VAR_NAMES[key]] = tokens[key];
   return style as CSSProperties;
 }

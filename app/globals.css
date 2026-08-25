@@ -69,6 +69,32 @@ body {
   }
 }
 
+/* Only one stratum is ever on screen, but all four figures live in the DOM at
+   once — 216 elements, every one of them re-evaluating --local whenever
+   --reveal changes. Skipping the offscreen ones keeps that work proportional
+   to what is actually visible. The intrinsic size matches the section's own
+   h-screen exactly, so nothing shifts when a section is skipped or restored. */
+.fig-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100vh;
+}
+
+/* Scope invalidation to the figure so a --reveal write cannot force layout
+   or paint outside its own box. */
+[data-reveal] {
+  contain: layout paint style;
+}
+
+/* Figures are drawn on a 460-unit viewBox. On a phone that scales to ~0.71,
+   which renders an 11px instrument label at under 8px on glass — too small to
+   read. Scaling the type up inside the viewBox restores it to ~11px on screen
+   without touching the drawing, and without a horizontal scroller. */
+@media (max-width: 640px) {
+  .fig-section svg text {
+    font-size: 15px;
+  }
+}
+
 .fig-el {
   --d: 0;
   --run: 0.55;

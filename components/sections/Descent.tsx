@@ -32,7 +32,7 @@ export function Descent() {
             key={stratum.id}
             id={stratum.id}
             aria-label={`${stratum.era}, ${stratum.year}`}
-            className="absolute inset-x-0 flex h-screen items-center"
+            className="fig-section absolute inset-x-0 flex h-screen items-center"
             style={{ top: `${topVhForRest(STRATUM_REST[i])}vh` }}
           >
             <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-x-10 gap-y-10 px-6 lg:grid-cols-12">

@@ -18,8 +18,18 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Smooth scroll only when motion is welcome; native scroll otherwise.
-    const lenis = media.matches ? null : new Lenis({ lerp: 0.08 });
+    // Smooth scroll is a pointer-device affordance, not a universal one.
+    //
+    // On touch, the platform already composites momentum scrolling off the
+    // main thread; replacing it with a rAF loop that writes transforms every
+    // frame moves that work back onto a CPU which is several times slower
+    // than a laptop's, and it competes with the dusk interpolation for the
+    // same frame budget. Native scroll on touch is both smoother and cheaper,
+    // so phones and tablets keep it. ScrollTrigger drives the journey either
+    // way — it listens to native scroll when Lenis is absent.
+    const coarsePointer = window.matchMedia("(pointer: coarse)");
+    const wantsSmooth = !media.matches && !coarsePointer.matches;
+    const lenis = wantsSmooth ? new Lenis({ lerp: 0.08 }) : null;
     const tick = (time: number) => lenis?.raf(time * 1000);
     if (lenis) {
       lenis.on("scroll", ScrollTrigger.update);
