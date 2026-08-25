@@ -45,6 +45,43 @@ body {
   line-height: 1.6;
 }
 
+/* Figure surfaces — pin the dusk tokens to a pole plus the chart ramp.
+   Scroll normally owns these on <html>; a [data-surface] subtree opts out so a
+   figure can be reviewed (or later embedded) against a known background.
+   Ramp steps are validated, not eyeballed: single hue, monotone lightness,
+   adjacent ΔL >= 0.06, light end >= 2:1 on its own surface. --fig-mute is the
+   de-emphasis series in emphasis charts and clears 3:1 in both modes. */
+[data-surface="light"] {
+  --bg: #f7f5f1;
+  --surface: #ffffff;
+  --ink: #1a1815;
+  --ink-secondary: #6b655c;
+  --line: #dfd9d0;
+  --copper: #c0682b;
+  --fig-1: #d99e6e;
+  --fig-2: #cd8449;
+  --fig-3: #c0682b;
+  --fig-4: #9a521f;
+  --fig-5: #6b3a17;
+  --fig-mute: #8a8378;
+}
+
+[data-surface="dark"] {
+  --bg: #12100e;
+  --surface: #1b1815;
+  --ink: #f2efe9;
+  --ink-secondary: #a8a199;
+  --line: #2a2620;
+  --copper: #d67f3c;
+  /* Dark flips the sequential anchor: more is lighter. */
+  --fig-1: #78421c;
+  --fig-2: #a25a26;
+  --fig-3: #d67f3c;
+  --fig-4: #e5a672;
+  --fig-5: #f0c8a4;
+  --fig-mute: #6a6359;
+}
+
 @keyframes signal-pulse {
   0% {
     transform: scale(1);
